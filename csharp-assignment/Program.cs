@@ -1,12 +1,22 @@
 ﻿
 using csharp_assignment.Interfaces;
 using csharp_assignment.Models;
+using csharp_assignment.Services;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using static System.Reflection.Metadata.BlobBuilder;
 
-var contactList = new List<IContact>();
+//var contactList = new List<IContact>();
 int option;
+
+var contactService = new ContactService();
+
+var contactList = contactService.GetContactsFromList();
+
+//WIP Spara lista till fil
+
+
 
 //Skapa och lägg till en ny kontakt i listan
 void addContact()
@@ -28,9 +38,12 @@ void addContact()
     Console.WriteLine("Skriv kontaktens adress");
     contact.Adress = Console.ReadLine();
 
-    contactList.Add(contact);
+    contactService.AddContactToList(contact);
+
     Console.Clear();
     Console.WriteLine($"Kontakten {contact.FirstName} {contact.LastName} lades till");
+
+    contactService.AddContactToList(contact);
 }
 
 //Ta bort en kontakt från listan genom att skriva in kontaktens email-adress
@@ -39,9 +52,11 @@ void removeContact()
     Console.Clear();
     Console.WriteLine("För att radera en kontakt, skriv in kontaktens email-adress nedan och tryck 'enter'");
 
-    var contactByEmail = contactList.Find(i => i.Email == Console.ReadLine());
+    var contactByEmail = contactList.FirstOrDefault(i => i.Email == Console.ReadLine());
     
-    contactList.Remove(contactByEmail);
+    contactService.RemoveContactFromList(contactByEmail);
+
+    //contactList.Remove(contactByEmail);
 
     Console.WriteLine($"Kontakten {contactByEmail.FirstName} {contactByEmail.LastName} har tagits bort");
 }
@@ -51,9 +66,10 @@ void findContact()
     Console.Clear();
     Console.WriteLine("För att visa en kontakt, skriv in kontaktens nummer och tryck 'enter'");
 
-    int specificContact = Convert.ToInt32(Console.ReadLine());
+    int specificContactIndex = Convert.ToInt32(Console.ReadLine()) - 1;
+    var specificContact = contactList.ElementAt(specificContactIndex);
 
-    Console.WriteLine(contactList[specificContact-1]);       
+    Console.WriteLine(specificContact);       
 
 } 
 
@@ -66,9 +82,9 @@ void printList()
 
     if (!isEmpty)
     {
-        for (int i = 0; i < contactList.Count; i++)
+        for (int i = 0; i < contactList.Count(); i++)
         {
-            Console.WriteLine($"{i+1}. {contactList[i].FirstName} {contactList[i].LastName}");
+            Console.WriteLine($"{i+1}. {contactList.ElementAt(i).FirstName} {contactList.ElementAt(i).LastName}");
         }
       
     }
