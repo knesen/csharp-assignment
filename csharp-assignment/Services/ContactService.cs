@@ -8,6 +8,11 @@ namespace csharp_assignment.Services
     {
         private readonly FileService _fileService = new FileService(@"C:\Projects\content.json");
         private List<Contact> _contactList = new List<Contact>();
+
+        /// <summary>
+        /// Add a contact to the contact list
+        /// </summary>
+        /// <param name="contact">Contact of type IContact</param>
         public void AddContactToList(Contact contact)
         {
             try
@@ -23,6 +28,10 @@ namespace csharp_assignment.Services
             
         }
 
+        /// <summary>
+        /// Deletes a contact from the contact list and saves the list to the file
+        /// </summary>
+        /// <param name="contact">Contact of the type IContact, identified for deletion by its Email attribute</param>
         public void RemoveContactFromList(Contact contact)
         {
             try
@@ -31,10 +40,17 @@ namespace csharp_assignment.Services
                 {
                     _contactList.Remove(contact);
                     _fileService.SaveContentToFile(JsonConvert.SerializeObject(_contactList));
+
                 }
+                else Console.WriteLine("Kontakten kunde inte hittas");
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message); }
         }
+
+        /// <summary>
+        /// Reads the file in the filepath if it exists
+        /// </summary>
+        /// <returns>Returns the contact list from the file</returns>
         public IEnumerable<Contact> GetContactsFromList()
         {
             try
@@ -42,7 +58,7 @@ namespace csharp_assignment.Services
                 var content = _fileService.GetContentFromFile();
                 if (!string.IsNullOrEmpty(content)) 
                 { 
-                _contactList = JsonConvert.DeserializeObject<List<Contact>>(content);
+                _contactList = JsonConvert.DeserializeObject<List<Contact>>(content)!;
                 }
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message); }

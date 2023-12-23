@@ -1,4 +1,5 @@
-﻿using System;
+﻿using csharp_assignment.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -7,15 +8,18 @@ using System.Threading.Tasks;
 
 namespace csharp_assignment.Services
 {
-    public interface IFileService
-    {
-        bool SaveContentToFile(string content);
-        string GetContentFromFile();
-    }
+    
 
     public class FileService(string filePath) : IFileService
     {
         private readonly string _filePath = filePath;
+
+       
+        /// <summary>
+        /// Saves the content to the filepath
+        /// </summary>
+        /// <param name="content">Content to be saved to the filepath</param>
+        /// <returns>Returns true if the content was saved to the filepath</returns>
         public bool SaveContentToFile(string content)
         {
             try
@@ -31,6 +35,10 @@ namespace csharp_assignment.Services
             return false;
         }
 
+        /// <summary>
+        /// Reads the file in the filepath
+        /// </summary>
+        /// <returns>Returns the content in the filepath as a string</returns>
         public string GetContentFromFile()
         {
             try

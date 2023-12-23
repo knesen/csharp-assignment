@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace csharp_assignment.Interfaces
 {
+
     public interface IContact
     {
         string FirstName { get; set; }
